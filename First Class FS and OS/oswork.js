@@ -1,0 +1,11 @@
+const fs = require("fs")
+const os = require("os")
+bit = os.version()
+ter = os.userInfo()
+cpu = os.cpus()
+cpus = JSON.stringify(cpu)
+user = JSON.stringify(ter)
+
+fs.writeFileSync("bit.html",`This application is working on ${bit} ${user} ${cpus}`)
+console.log(cpus)
+// console.log(os.cpus())
