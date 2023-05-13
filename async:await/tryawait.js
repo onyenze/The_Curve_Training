@@ -13,17 +13,17 @@ const fs = require("fs")
 // readFiles()
 
 
-const writeFiles = async () => {
-    try {
-        await fs.writeFile("./sample1.txt","the day is bright",(e)=>{
-            console.log("created")
-        })
-    } catch (e) {
-        console.log(e)
-    }
-}
+// const writeFiles = async () => {
+//     try {
+//         await fs.writeFile("./sample1.txt","the day is bright",(e)=>{
+//             console.log("created")
+//         })
+//     } catch (e) {
+//         console.log(e)
+//     }
+// }
 
-writeFiles()
+// writeFiles()
 
 
 // const appendFiles = async () => {
@@ -50,3 +50,4 @@ writeFiles()
 // }
 
 // unlinkFiles()
+
