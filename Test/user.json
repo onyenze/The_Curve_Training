@@ -1,6 +1,9 @@
 {
    "users" : [
         {"id":1, "name":"ubani","age":34},
-        {"id":2, "name":"uche","age":14}
+        {"id":2, "name":"uche","age":14},
+        {"id":3, "name":"goat","age":4},
+        {"id":4, "name":"man","age":54},
+        {"id":5, "name":"sad","age":74}
     ]
 }

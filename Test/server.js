@@ -1,8 +1,9 @@
 const fs = require("fs")
 const express = require("express")
-const PORT = 3030
+const PORT = 3330
 
 const app = express()
+app.use( express.json())
 
 
 // sending a welcome message
@@ -35,10 +36,6 @@ app.get("/users",(req,res) =>{
     }
 })
 
-app.listen(PORT, () =>{
-    console.log(`app is listening to server on ${PORT}`)
-})
-
 
 // get one user
 app.get("/users/:id",(req,res)=>{
@@ -50,4 +47,54 @@ app.get("/users/:id",(req,res)=>{
     }else {
         res.status(200).json({status:user})
     }
+})
+
+
+//create new users
+app.post("/users", (req,res)=>{
+    const database = readDatabase()
+    const newUser = req.body
+    newUser.id = database.users.length + 1   
+    database.users.push(newUser)
+    writeDatabase(database)
+    res.status(201).json({
+        newData:newUser
+    })    
+})
+
+// update users in the json
+app.put("/users/:id",()=>{
+    const database = readDatabase()
+    const userId = parseInt(req.params.id)
+    const updatedUser = req.body
+    const index = database.users.findIndex((i)=>(i.id === userId))
+    if (index !==-1){
+        database.users[index] = {...database.users[index], ...updatedUser}
+        writeDatabase(database)
+        res.status(200).json({data:database.users[index]})
+    } else {
+        res.send("wrong id sent")
+    }
+})
+
+app.delete("/users/:id",(req,res) => {
+    const database = readDatabase()
+    const userId  = parseInt(req.params.id)
+    const index = database.users.findIndex((i)=>(i.id===userId))
+    if (!index){
+        res.status(404).json({message:"error"})
+    } else {
+
+        deletedUser =database.users[index]
+        database.users.splice(index,1)
+        writeDatabase(database)
+        res.status(200).json({
+            deletedData:deletedUser,
+            message:"deleted"
+    })}
+})
+
+
+app.listen(PORT, () =>{
+    console.log(`app is listening to server on ${PORT}`)
 })
