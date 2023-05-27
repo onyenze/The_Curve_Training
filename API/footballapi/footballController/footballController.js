@@ -1,6 +1,6 @@
-const allTeams = require("../footballModel/footballModel")
+const {allTeams, getOneTeam} = require("../footballModel/footballModel")
 
-
+// to get all the teams
 const totalTeams = async () => {
     try {
         work = await allTeams()
@@ -12,6 +12,15 @@ const totalTeams = async () => {
         console.log(error.message)
     }
 }
-totalTeams()
 
-module.exports = totalTeams
+// to get a single team
+const singleTeam = async (req,res,ID) => {
+    const team = await getOneTeam(ID)
+    try {if (!team){res.end(JSON.stringify(team))}
+        else{res.end(JSON.stringify(team))}     
+    } catch (error) {
+        res.end(error.message)
+    }
+}
+
+module.exports = {totalTeams, singleTeam}

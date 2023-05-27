@@ -1,13 +1,13 @@
 
 
-[{"ID":"1",
+[{"ID":1,
 "TeamName":"Barcelona",
 "Stadium":"Camp Nou",
 "coach":"Xavi",
 "teamColor":"red",
 "ucl":true
 }, {
-    "ID":"2",
+    "ID":2,
     "TeamName":"Real Madrid",
     "Stadium":"Santiago Bernabeau",
     "coach":"Ancelotti",

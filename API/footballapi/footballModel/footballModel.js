@@ -1,6 +1,6 @@
 const footballDb = require("../footballDatabase.json")
+const { v4: uuidv4 } = require("uuid")
 
-// console.log(footballDb)
 
 //create a function to get all teams
 const allTeams =  ()=> {
@@ -8,4 +8,12 @@ const allTeams =  ()=> {
     resolve(footballDb)
    })
 }
-module.exports=allTeams
+
+// create a function to get one team
+const getOneTeam = (id) => {
+   return new Promise ((resolve)=>{
+      const team = footballDb.find((item)=>(item.ID === id))
+      resolve(team)
+   })
+}
+module.exports={allTeams, getOneTeam}
