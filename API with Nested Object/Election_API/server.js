@@ -10,8 +10,54 @@ const electionSchema = mongoose.Schema({
     parties: Array,
     result: Object,
     colationOfficer: String,
-    isRigged: Boolean,
-    totalLg: Number
+    isRigged: {
+        type: Boolean,
+        default: function () {
+          let totalVoters = 0;
+          for (const [key, value] of Object.entries(this.result)) {
+            totalVoters += value;
+          }
+          if (totalVoters > this.totalRegisteredVoters) {
+            return true;
+          } else {
+            return false;
+          }
+        },
+      },
+    totalLg: Number,
+    winner: {
+        type: String,
+        default: function () {
+          let maxKey = null;
+          let maxValue = -Infinity;
+          for (const [key, value] of Object.entries(this.result)) {
+            if (value > maxValue) {
+              maxValue = value;
+              maxKey = key;
+            }
+          }
+          return maxKey;
+        },
+        required: false,
+      },
+      totalVoters: {
+        type: Number,
+        default: function () {
+          let totalVoters = 0;
+          for (const [key, value] of Object.entries(this.result)) {
+            totalVoters += value;
+          }
+          return totalVoters;
+        },
+      },
+      totalRegisteredVoters: {
+        type: Number,
+        required: [
+          true,
+          "Enter the total number of registerd voters in this state",
+        ],
+      },
+
 })
 
 const electionModel = mongoose.model("Presidential Election", electionSchema)
