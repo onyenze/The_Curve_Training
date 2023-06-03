@@ -1,15 +1,21 @@
-const express = require("express")
+const  express = require("express")
 const mongoose = require("mongoose")
- const PORT = 5677
+PORT = 4678
 
- const app = express()
- app.use(express.json())
+const app = express()
+app.use(express.json())
+
+app.get("/",(req,res)=>{res.status(200).json({message:"Welcome to this election API"})})
 
 const electionSchema = mongoose.Schema({
     state: String,
-    parties: Array,
-    result: Object,
-    colationOfficer: String,
+    parties: {type:Array},
+    result: {
+        apc : {type:Number,required: [true, "Number is required"] },
+        pdp : {type:Number,required: [true, "Number is required"] },
+        lp : {type:Number,required: [true, "Number is required"] },
+        apga : {type:Number,required: [true, "Number is required"] }
+    },
     isRigged: {
         type: Boolean,
         default: function () {
@@ -24,54 +30,52 @@ const electionSchema = mongoose.Schema({
           }
         },
       },
-    totalLg: Number,
-    winner: {
-        type: String,
-        default: function () {
-          let maxKey = null;
-          let maxValue = -Infinity;
-          for (const [key, value] of Object.entries(this.result)) {
-            if (value > maxValue) {
-              maxValue = value;
-              maxKey = key;
-            }
-          }
-          return maxKey;
+      totalLg: Number,
+      winner: {
+          type: String,
+          default: function () {
+            let maxKey = null;
+            let maxValue = -Infinity;
+            for (const [key, value] of Object.entries(this.result)) {
+              if (value > maxValue) {
+                maxValue = value;
+                maxKey = key;
+                
+              }
+            }if (this.isRigged === false)
+            {return `is ${maxKey} with ${maxValue} votes`;}
+            else {return "\n but there is no real winner because it was rigged" }
+          },
+          required: false,
         },
-        required: false,
-      },
-      totalVoters: {
-        type: Number,
-        default: function () {
-          let totalVoters = 0;
-          for (const [key, value] of Object.entries(this.result)) {
-            totalVoters += value;
-          }
-          return totalVoters;
-        },
-      },
-      totalRegisteredVoters: {
-        type: Number,
-        required: [
-          true,
-          "Enter the total number of registerd voters in this state",
-        ],
-      },
+        totalVoters: {
+            type: Number,
+            default: function () {
+              let totalVoters = 0;
+              for (const [key, value] of Object.entries(this.result)) {
+                totalVoters += value;
+              }
+              return totalVoters;
+            },
+          },
+          totalRegisteredVoters: {
+            type: Number,
+            required: [
+              true,
+              "Enter the total number of registerd voters in this state",
+            ],
+          },
+    
 
 })
 
 const electionModel = mongoose.model("Presidential Election", electionSchema)
 
-app.get("/",(req,res)=>{
-    res.send("Welcome to my Election API")
-})
-
-
 // create an entry
 app.post("/create",async (req,res)=>{try {
     const newEntry = await electionModel.create(req.body)
     res.status(200).json({data:newEntry})
-} catch (error) {
+} catch (error) {res.send(error.message)
     console.log(error.message)
 }
 })
@@ -99,78 +103,7 @@ app.get("/election", async (req, res) => {
         message: error.message,
       });
     }
-  });
-
-//getting entry based on ID
-app.get("/election/:id", async (req, res) => {
-    try {
-      const entryId = req.params.id;
-      const entry = await electionModel.findById(entryId);
-      if (!entry) {
-        res.status(404).json({
-          message: "entry not found",
-        });
-      } else {
-        res.status(200).json({
-          message: "successful",
-          data: entry,
-        });
-      }
-    } catch (error) {
-      res.status(500).json({
-        message: error.message,
-      });
-    }
-  });
-
-
-//updating entry based on ID
-app.put("/election/:id", async (req, res) => {
-    try {
-      const entryId = req.params.id;
-      const updatedEntry = await electionModel.findByIdAndUpdate(entryId, req.body, {
-        new: true,
-        runValidators: true,
-      });
-      if (!updatedEntry) {
-        res.status(404).json({
-          message: "entry not found",
-        });
-      } else {
-        res.status(200).json({
-          message: "entry updated",
-          data: updatedEntry,
-        });
-      }
-    } catch (error) {
-      res.status(500).json({
-        message: error.message,
-      });
-    }
-  });
-
-
-//deleting entry
-app.delete("/election/:id", async (req, res) => {
-    try {
-      const entryId = req.params.id;
-      const deletedEntry = await electionModel.findByIdAndDelete(entryId);
-      if (!deletedEntry) {
-        res.status(404).json({
-          message: "entry not found",
-        });
-      } else {
-        res.status(200).json({
-          message: "entry deleted",
-          data: deletedEntry,
-        });
-      }
-    } catch (error) {
-      res.status(500).json({
-        message: error.message,
-      });
-    }
-  });
+  });   
 
 // Getting where the election is rigged
 app.get("/electionRigged", async (req, res) => {
@@ -197,38 +130,13 @@ app.get("/electionRigged", async (req, res) => {
     }
   });
 
-
-// find where we have double collation officer
-app.get("/collation/:collation", async (req, res) => {
-    try {
-      const entry = await electionModel.find({colationOfficer :req.params.collation,});
-      if (entry.length<1) {
-        res.status(404).json({
-          message: "not an officer",
-        });
-      } else if (entry.length>1) {
-        res.status(200).json({
-          message: "Worked on two states",
-          data: entry,
-        });
-      }
-      else {res.status(200).json({
-        message: "Worked on one state",
-        data: entry
-      })}
-    } catch (error) {
-      res.status(500).json({
-        message: error.message,
-      });
-    }
-  });
 // to delete the rigged elections
 app.delete("/riggedElection", async (req,res)=>{
     try {
         const riggedElection = await electionModel.find({isRigged:true})
         const deletedEntry = await electionModel.deleteMany({isRigged:true})
         res.status(200).json({
-            message:"These are the rigged Elections",
+            message:"These are the rigged Elections and will be deleted",
             data:riggedElection,
             status:deletedEntry
         })
@@ -237,12 +145,23 @@ app.delete("/riggedElection", async (req,res)=>{
     }
 })
 
+// to get winner in a particular state
+app.get("/winner/:state", async (req, res) => {
+    try {
+        const stateName = req.params.state
+        const statePosition = await electionModel.find({state:stateName})
+        const winningParty =statePosition[0].winner
+        res.status(200).json({message:`The Winner of the Election in ${stateName} state ${winningParty} `})
+    } catch (error) {
+        
+    }
+})
 
 
-
-
-
-
-
- app.listen(PORT,()=>{console.log("working on some port")})
- mongoose.connect("mongodb+srv://chibuezeonyenze123:jzwWbLsC87KcZwjd@cluster0.3w8at1x.mongodb.net/").then(()=>{console.log("working as well")})
+mongoose.connect("mongodb+srv://chibuezeonyenze123:jzwWbLsC87KcZwjd@cluster0.3w8at1x.mongodb.net/").then(() => {
+    console.log("connected to db");
+  })
+  .catch((e) => {
+    console.log(e.message);
+  });
+app.listen(PORT,()=>{console.log("This port is working")})
