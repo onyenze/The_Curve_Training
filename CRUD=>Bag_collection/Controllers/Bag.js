@@ -44,3 +44,19 @@ exports.updateInfo = async (req,res)=>{
         })       
     }
 }
+
+// delete record
+exports.deleteData = async (req,res)=>{
+    try {
+        const entryId = req.params.id
+        // const data = await bagModel.findById(entryId)
+        const deletedData = await bagModel.findByIdAndDelete(entryId)
+        res.status(201).json({
+            message:"deleted",
+            // info:data,
+            result : deletedData
+        })
+    } catch (error) {
+        res.send(error.message)
+    }
+} 
