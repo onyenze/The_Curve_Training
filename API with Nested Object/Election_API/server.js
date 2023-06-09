@@ -158,6 +158,66 @@ app.get("/winner/:state", async (req, res) => {
 })
 
 
+//function to iterate through an array of objects and add values with similar key names
+function sumResults(arr) {
+  const result = {};
+
+  for (let obj of arr) {
+    for (let key in obj) {
+      if (typeof obj[key] === "number") {
+        if (result[key]) {
+          result[key] += obj[key];
+        } else {
+          result[key] = obj[key];
+        }
+      }
+    }
+  }
+
+  return result;
+}
+
+//function to get the highest value of an object
+function getWinner(obj) {
+  let maxKey = null;
+  let maxValue = -Infinity;
+  for (const [key, value] of Object.entries(obj)) {
+    if (value > maxValue) {
+      maxValue = value;
+      maxKey = key;
+    }
+  }
+  return `The winner of the election is ${maxKey} with ${maxValue} votes`;
+}
+
+//to get overallwinner
+app.get("/overall", async (req, res) => {
+  try {
+    const allValid = await electionModel.find({ isRigged: false });
+    const invalid = await electionModel.find({ isRigged: true });
+    let arrayy = [];
+    allValid.forEach((element) => {
+      arrayy.push(element.result);
+    });
+
+    let result = sumResults(arrayy);
+    let winner = getWinner(result);
+
+    res.status(200).json({
+      electionResult: result,
+      electionWinner: winner,
+      statesWithValidVotes: allValid.length,
+      statesWithInvalideVotes: invalid.length,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+});
+
+
+
 mongoose.connect("mongodb+srv://chibuezeonyenze123:jzwWbLsC87KcZwjd@cluster0.3w8at1x.mongodb.net/").then(() => {
     console.log("connected to db");
   })
