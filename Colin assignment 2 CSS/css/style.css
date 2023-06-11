@@ -1,0 +1,197 @@
+*{
+    padding: 0%;
+    margin: 0%;
+    width: 100%;
+    
+    
+}
+.oga{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.MainBody{
+    width: 30%;
+    height: 650px;
+    background-color: grey;
+    border: 1px solid black;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    
+       
+}
+
+.firstHeader{
+    height: 7.5%;
+    width: 80%;
+    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: lightgrey;
+    justify-content: space-around;
+    
+
+}
+.nav1{
+    border: 1px solid black;
+    background-color: whitesmoke;
+    width: 80%;
+    height: 50%;
+    display: flex;
+    align-items: center;
+}
+
+.sectionContainer{
+    width: 80%;
+    height: 80%;
+    display: flex;
+    justify-content: center;
+    justify-content: space-between;
+}
+
+.sectionLeft{
+    background-color: lightgray;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    width: 30%;
+    border: 1px solid black;
+    justify-content: space-around;
+    /* text-align: end; */
+
+}
+
+.leftHeader{
+    border: 1px solid black;
+    background-color: whitesmoke;
+    width: 80%;
+    height: 10%;
+}
+.leftNav{
+    border: 1px solid black;
+    background-color: whitesmoke;
+    width: 80%;
+    height: 65%;
+    display: flex;
+    align-items: center;
+}
+.leftFooter{
+    border: 1px solid black;
+    background-color: whitesmoke;
+    width: 80%;
+    height: 10%;
+
+}
+.sectionRight{
+    display: flex;
+    background-color: lightgray;
+    height: 100%;
+    width: 55%;
+    border: 1px solid black;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+.rightHeader{
+    border: 1px solid black;
+    background-color: whitesmoke;
+    width: 80%;
+    height: 10%;
+}
+.topArticle{
+    border: 1px solid black;
+    background-color: whitesmoke;
+    width: 80%;
+    height: 30%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+.headerArticle1{
+    border: 1px solid black;
+    background-color: whitesmoke;
+    width: 80%;
+    height: 15%;
+}
+.p1{
+    border: 1px solid black;
+    background-color: whitesmoke;
+    width: 80%;
+    height: 15%;
+}
+.p2{
+    border: 1px solid black;
+    background-color: whitesmoke;
+    width: 80%;
+    height: 15%;
+}
+.footerArticle{
+    border: 1px solid black;
+    background-color: whitesmoke;
+    width: 80%;
+    height: 15%;
+}
+.bottomArticle{
+    border: 1px solid black;
+    background-color: whitesmoke;
+    width: 80%;
+    height: 30%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+.headerArticle2{
+    border: 1px solid black;
+    background-color: whitesmoke;
+    width: 80%;
+    height: 15%;
+}
+.paside{
+    width: 80%;
+    height: 45%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+}
+.aside1{
+    border: 1px solid black;
+    background-color: whitesmoke;
+    width: 60%;
+    height: 100%;
+}
+.aside2{
+    border: 1px solid black;
+    background-color: whitesmoke;
+    width: 30%;
+    height: 100%;
+}
+.footerArticle2{
+    border: 1px solid black;
+    background-color: whitesmoke;
+    width: 80%;
+    height: 15%;
+}
+.footerArticle3{
+    border: 1px solid black;
+    background-color: whitesmoke;
+    width: 80%;
+    height: 10%;
+}
+.finalFooter{
+    width: 80%;
+    height: 7.5%;
+    border: 1px solid black;
+    background-color: lightgrey;
+}
