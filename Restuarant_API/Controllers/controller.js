@@ -31,4 +31,24 @@ async function getAllBranch(req,res){try {
 
 }
 
-module.exports ={foodMenu,getBranch,getAllBranch}
+const updateMenu = async(req,res)=>{try {
+    const theProduct = await foodModel.findOne(req.params)
+    const  avil = theProduct.citizenMeal.main
+    const updateProduct = await foodModel.updateOne({"req.body.main":avil},
+    {$set:{"citizenMeal.main":req.body.main,
+            "refuelMax.main":req.body.main,
+            "refuel.main":req.body.main,
+            "citizenMeal.sides":req.body.sides,
+            "refuelMax.sides":req.body.sides,
+            "citizenMeal.Drink":req.body.Drink,
+            "refuelMax.Drink":req.body.Drink}})
+    res.status(200).json({message:"the menu has been updated",
+            data:updateProduct
+           })
+} catch (error) {
+    res.json(error.message)  
+}
+
+}
+
+module.exports ={foodMenu,getBranch,getAllBranch,updateMenu}
