@@ -2,16 +2,16 @@ const mongoose = require("mongoose")
 
 
 const profileSchema = new mongoose.Schema({
-    Name:{
+    name:{
         type:String,
         required:[true,"please fill your Name"],
         unique:true
     },
-    Class:{
+    class:{
         type:String,
         required:[true,"please fill your Class"],
     },
-    Age:{
+    age:{
         type:Number,
         required:[true,"please fill your Age"],
     },
