@@ -1,0 +1,146 @@
+*{
+    margin: 0%;
+    padding: 0%;
+    box-sizing: border-box;
+}
+body{
+    width: 100%;
+    height: 100vh;
+    background-color: white;
+    gap: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.container{
+    width: 90%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    
+}
+.header1{
+    width: 100%;
+    height: 12.5%;
+    background-color: white;
+    display: flex;
+    align-items: end;
+}
+.header1 h1{
+    font-size: 3rem;
+    font-weight: 500;
+    margin-left: 20px;
+}
+.header2{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 86%;
+    background-color: white;
+    gap: 30px;
+    align-items: center;
+}
+.section1{
+    height: 60%;
+    display: flex;
+    width: 100%;
+    background-color: white;
+    gap: 15px;
+    justify-content: center;
+    justify-content: space-between;
+}
+.left{
+    display: flex;
+    height: 100%;
+    width: 72%;
+    background-color: lightgrey;
+}
+.left img{
+    height: 100%;
+    width: 70%;
+    border-radius: 20px;
+    padding: 10px;
+}
+.words{
+    padding: 15px;
+    display: flex;
+}
+.words p{
+    margin-top: 10px;
+}
+.words footer{
+    display: flex;
+    align-items: end;
+    height: 50%;
+}
+.right{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 25%;
+    gap: 15px;
+    padding: 15px;
+    border-radius: 20px;
+    background-color: white;
+    margin-bottom: 18px;
+
+}
+.right img{
+    width: 100%;
+    height: 50%;
+    border-radius: 20px;
+}
+.words2{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.section2{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 30%;
+    width: 98%;
+    display: grid;
+    grid-template-columns: repeat(4,20%);
+    grid-template-rows: repeat(1,80%);
+    justify-content: space-between;
+}
+.one{display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.one img{
+    height: 110%;
+    width: 110%;
+    border-radius: 12px;
+}
+.two{display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.two img{
+    height: 110%;
+    width: 110%;
+    border-radius: 12px;
+}
+.three{display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.three img{
+    height: 110%;
+    width: 110%;
+    border-radius: 12px;
+}
+.four{display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.four img{
+    height: 110%;
+    width: 110%;
+    border-radius: 12px;
+}
