@@ -47,5 +47,7 @@ const newContact = async (req,res) => {
         res.status(200).json({message:error.message})
     }
 
+    
+
 }
 module.exports=newContact
