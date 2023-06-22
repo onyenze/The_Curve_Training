@@ -8,12 +8,12 @@ const validatePerson = require("../middleware/validator")
 const createprofile = async (req,res)=>{
     try {console.log(req.file)
         const {personName,personPhone}= req.body
-        const {error} =  await validatePerson(req.body)
-        if (error){
-            res.status(409).json({
-                message:error.details[0].message
-            })
-        }
+        // const {error} =  await validatePerson(req.body)
+        // if (error){
+        //     res.status(409).json({
+        //         message:error.details[0].message
+        //     })
+        // }
         const result = await cloudinary.uploader.upload(req.file.path)
 
         const newPerson = new personModel({
@@ -78,13 +78,15 @@ const updatePerson = async (req,res)=>{
 
 const deletePerson = async (req,res)=>{
     try {
-        const {id} = req.params
-        const person = await personModel.findById(id)
+        const person = await personModel.findById(req.params.id)
 
         if(person){
             if (person.personProfile){
             const public_id = person.personProfile.split("/").pop().split(".")[0]
             await cloudinary.uploader.destroy(public_id)
+
+            // Delete the profile from MongoDB
+            await profileModel.findByIdAndDelete(req.params.id);
             }
         } else {res.status(400).json({message:"Not found"})}
     } catch (error) {
