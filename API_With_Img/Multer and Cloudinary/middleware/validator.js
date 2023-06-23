@@ -30,3 +30,5 @@ const validatePerson = (req,res,next)=>{
         next()
     }
 }
+
+module.exports = validatePerson
