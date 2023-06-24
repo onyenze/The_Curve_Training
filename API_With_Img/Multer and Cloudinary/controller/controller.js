@@ -66,7 +66,7 @@ const updatePerson = async (req,res)=>{
             person.personName = personName;
             person.personPhone=personPhone;
             person.personProfile= result.secure_url
-            await profile.save()
+            await person.save()
 
             fs.unlinkSync(req.file.path)
             }
