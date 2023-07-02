@@ -1,5 +1,4 @@
 const {
-    
     newResturant,
     getResturant,
     updateResturant,
