@@ -53,7 +53,7 @@ const signIn = async (req,res)=>{
             {username,email},
             process.env.MY_SECRET,{expiresIn:"1h"})
 
-            isEmail.tok = 
+           
     } catch (error) {
        res.status(500).json({
         message:error.message

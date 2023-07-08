@@ -1,5 +1,6 @@
 const express = require("express")
-const router = require(router)
+const recRouter = require("./routers/recordRouter")
+const router = require("./routers/route")
 
 const app = express()
 const PORT = 9000
@@ -9,6 +10,8 @@ app.get("/test",(req,res)=>{
 })
 
 app.use("/api", router)
+app.use("/api", recRouter)
+
 
 app.listen(PORT, ()=>{
     console.log(`Server is running on port ${PORT}`)
