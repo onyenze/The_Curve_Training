@@ -7,10 +7,18 @@ const userAuth = async(req,res,next)=>{
         res.status(404).json({
             message: "No authorization token provided"
         })
-    } else {
+    } 
         const token = hasAuthorization.split(" ")[1]
-        const decodedToken = await jwt.verify(token, process.env.MY_SECRET)
-        req.user = JSON.stringify(decodedToken)
-        req.userId = decodedToken.userId
-    }
+        try {
+            const decodedToken =  await jwt.verify( token, process.env.JWT_SECRETE )
+            req.user = JSON.stringify(decodedToken);
+            req.userId = decodedToken.userId;
+            req.userEmail = decodedToken.email;
+            req.username = decodedToken.username;
+            next();
+        } catch (error) {
+            res.status(500).json({ message: error.message})
+        }
 }
+
+module.exports = {userAuth}

@@ -49,9 +49,7 @@ const signIn = async (req,res)=>{
         })}
 
         // generate the token
-        const checkToken = jwt.sign(
-            {username,email},
-            process.env.MY_SECRET,{expiresIn:"1h"})
+        
 
            
     } catch (error) {
@@ -61,4 +59,4 @@ const signIn = async (req,res)=>{
     }
 }
 
-module.exports = {signUp}
+module.exports = {signUp, signIn}
