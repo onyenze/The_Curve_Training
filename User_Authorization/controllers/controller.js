@@ -59,4 +59,38 @@ const signIn = async (req,res)=>{
     }
 }
 
-module.exports = {signUp, signIn}
+
+// signOut
+const blackList = []
+const signOut = async (req, res) => {
+    try {
+        // check for content in the authorization head
+        const authHeader = req.headers.authorization;
+        // get the token from the authorization head
+        const token = authHeader.split( " " )[ 1 ];
+        // remove the token from the authentication head and place it in the blacklist array.
+        await blackList.push( token );
+        // return a success response
+        res.status(200).json({
+        status: "Success",
+        message: "User logged out successfully.",
+        });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
+const genToken = async ( user ) => {
+    const token = await jwt.sign( {
+        userId: user._id,
+        username: user.username,
+        email: user.email,
+        password: user.password
+    }, process.env.JWT_SECRETE, {expiresIn: "50m"} )
+    
+    return token;
+}
+
+module.exports = {signUp, signIn, signOut}
