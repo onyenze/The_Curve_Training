@@ -2,6 +2,15 @@ const festac = require("../models/userModel")
 const bcryptjs = require("bcryptjs")
 
 
+
+const isAuth = (req,res,next)=>{
+    if(req.session.isAuth){
+        next()
+    }
+    else {
+        res.json("Please log in before you perform this action")
+    }
+}
 const createUser = async(req,res)=>{
     try {
         const {name,email,password,phoneNumber}=req.body
@@ -54,7 +63,7 @@ const signIn = async (req,res)=>{
         const isPassword = await bcryptjs.compare(password, check.password)
         if(!isPassword){res.status(400).json({message:"wrong password format"})}
 
-
+        req.session.isAuth = true
 
         await check.save()
 
@@ -70,5 +79,16 @@ const signIn = async (req,res)=>{
     }
 }
 
+const getOne = async(req,res)=>{
+    try {
+        const user = await festac.findById(req.params.id)
+        res.status(200).json({
+            message:"found",
+            data:user
+        })
+    } catch (error) {
+        res.status(500).json({message:error.message})
+    }
+}
 
-module.exports = {createUser, signIn}
+module.exports = {createUser, signIn, getOne,isAuth}
