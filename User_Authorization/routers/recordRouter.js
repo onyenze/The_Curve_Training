@@ -1,6 +1,12 @@
 const express = require("express")
 const router = express.Router()
-const {createRecord} = require("../controllers/recordController")
+const {
+    createRecord,
+    getRecords,
+    getRecord,
+    updateRecord,
+    deleteRecord
+} = require("../controllers/recordController")
 
 const {userAuth} = require("../middlewares/middleware")
 

@@ -1,3 +1,4 @@
+require("./config/config")
 const express = require("express")
 const recRouter = require("./routers/recordRouter")
 const router = require("./routers/route")

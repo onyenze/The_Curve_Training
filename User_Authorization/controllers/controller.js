@@ -48,7 +48,13 @@ const signIn = async (req,res)=>{
             message:"Incorrect Password"
         })}
 
-        // generate the token
+       // save the generated token to "token" variable
+       const token = await genToken( isEmail );
+       // return a response
+       res.status( 200 ).json( {
+           message: "Sign In successful",
+           token: token
+       })
         
 
            
