@@ -1,4 +1,7 @@
 const jwt = require("jsonwebtoken")
+const user = require("../models/userModel")
+const dotenv = require("dotenv")
+dotenv.config()
 
 // auth middleware
 const userAuth = async(req,res,next)=>{
@@ -21,4 +24,39 @@ const userAuth = async(req,res,next)=>{
         }
 }
 
-module.exports = {userAuth}
+
+// Admin middleware
+const authenticator = async(req,res,next)=>{
+    const newUser = await user.findById(req.params.id)
+    const token = newUser.token
+    jwt.verify(
+        token, 
+        process.env.MY_SECRET,
+        (err,payLoad)=>{if(err)res.status(400).json({message:err.message})
+    else {
+        req.user = payLoad
+        next()
+    }}
+        )
+}
+const isAdminAuthorized = (req,res,next)=>{
+    authenticator(req,res,(async()=>{
+        const existingUser = await user.findById(req.params.id)
+        if(existingUser.isAdmin==false){res.json("You are not an admin")}
+        else{
+            next()
+        }
+    }))
+} 
+
+
+const isSuperAdminAuthorized = (req,res,next)=>{
+    authenticator(req,res,(async()=>{
+        const existingUser = await user.findById(req.params.id)
+        if(existingUser.isSuperAdmin==false){res.json("You are not a Super admin")}
+        else{
+            next()
+        }
+    }))
+} 
+module.exports = {userAuth,isAdminAuthorized,isSuperAdminAuthorized}

@@ -26,9 +26,13 @@ const signUp =async(req,res)=>{
  
 
         const user = new userModel(data)
+        // save the generated token to "token" variable
+       const newToken = await genToken( user )
+
+        user.token = newToken
 
         const subject = "Kindly Verify"
-        const link = `${req.protocol}://${rep.get("host")}`
+        const link = `${req.protocol}://${req.get("host")}/api/userverify/${user._id}`
         const message = `Click on the ${link} to verify`
         sendEmail({email:user.email,
             subject,
@@ -44,8 +48,25 @@ const signUp =async(req,res)=>{
     }
 }
 
-
-
+// user verify
+const userVerify = async(req,res)=>{
+    try {
+        const verified = await userModel.findByIdAndUpdate(req.params.id,{isVerified:true},)
+        if(!verified){
+            res.status(400).json({
+                message:"unable to verify user"
+            })
+        } else {
+            res.status(200).json({
+                message:"user has been verified"
+            })
+        }
+    } catch (error) {
+        res.status(400).json({
+            message:error.message
+        })
+    }
+}
 
 const signIn = async (req,res)=>{
     try {
@@ -114,4 +135,15 @@ const genToken = async ( user ) => {
     return token;
 }
 
-module.exports = {signUp, signIn, signOut}
+
+// get all users
+const getAll = async(req,res)=>{
+    try {
+       const autheticatedUser = await userModel.findById(req.params.id) 
+       const allUsers = await userModel.find()
+       if (allUsers) {res.json(allUsers)} else {res.json("Users not found")}
+    } catch (error) {
+        res.status(500).json({message:error.message})
+    }
+}
+module.exports = {signUp, signIn, signOut,userVerify,getAll}
