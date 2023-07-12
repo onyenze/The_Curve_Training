@@ -2,11 +2,13 @@ const userModel = require("../models/userModel")
 const bcryptjs = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 
+const {sendEmail} = require("./email")
+
 // signup
 const signUp =async(req,res)=>{
     try {
         const {username,email,password} = req.body
-        const isEmail = await userModel.find({email})
+        const isEmail = await userModel.findOne({email})
         if(isEmail){
             res.status(400).json({
                 message:"Email already Exist"
@@ -20,8 +22,19 @@ const signUp =async(req,res)=>{
             email,
             password:hashedPassword
         }
-        const user = new userModel.create(data)
-        res.status.json({
+
+ 
+
+        const user = new userModel(data)
+
+        const subject = "Kindly Verify"
+        const link = `${req.protocol}://${rep.get("host")}`
+        const message = `Click on the ${link} to verify`
+        sendEmail({email:user.email,
+            subject,
+            message})
+        await user.save()
+        res.status(201).json({
             data:user
         })
         }
@@ -32,6 +45,8 @@ const signUp =async(req,res)=>{
 }
 
 
+
+
 const signIn = async (req,res)=>{
     try {
         const {username,email,password} = req.body
@@ -40,13 +55,13 @@ const signIn = async (req,res)=>{
         const isEmail = await userModel.findOne({email})
         if(!isEmail){res.status(400).json({
             message:"Email is incorrect"
-           }) } 
+           }) } else {
         
         // validate password
         const isPassword = await bcryptjs.compare(password, isEmail.password)
         if(!isPassword){res.status(400).json({
             message:"Incorrect Password"
-        })}
+        })}     
 
        // save the generated token to "token" variable
        const token = await genToken( isEmail );
@@ -54,7 +69,7 @@ const signIn = async (req,res)=>{
        res.status( 200 ).json( {
            message: "Sign In successful",
            token: token
-       })
+       })   }
         
 
            
@@ -94,7 +109,7 @@ const genToken = async ( user ) => {
         username: user.username,
         email: user.email,
         password: user.password
-    }, process.env.JWT_SECRETE, {expiresIn: "50m"} )
+    }, process.env.MY_SECRET, {expiresIn: "50m"} )
     
     return token;
 }
