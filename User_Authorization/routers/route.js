@@ -1,6 +1,6 @@
 const express = require("express")
 const router = express.Router()
-const {signUp, signIn, signOut,userVerify,getAll} = require("../controllers/controller")
+const {signUp, signIn, signOut,userVerify,getAll,resetpassword,forgotPassword} = require("../controllers/controller")
 
 const {isAdminAuthorized,isSuperAdminAuthorized} = require("../middlewares/middleware")
 
@@ -19,7 +19,8 @@ router.route( "/getAllW/:id" )
 router.route("/userverify/:id")
 .put(userVerify)
 
-
+router.route("/forgot-password").get(forgotPassword) 
+router.route("/reset-password/:id").put(resetpassword);
 
 router.route( "/sign-out" )
     .post(signOut)
