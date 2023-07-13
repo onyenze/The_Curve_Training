@@ -1,31 +1,3 @@
-// const nodemailer = require("nodemailer")
-// const dotenv = require("dotenv")
-
-// dotenv.config()
-// const mailsender = async(option)=>{
-    
-// const transporter = nodemailer.createTransport({
-//     service:process.env.service,
-//     auth:{
-//         user:process.env.user,
-//         password:process.env.password,
-//         secure:false
-//     }
-// })
-
-// let mailoption = {
-//     from:process.env.user,
-//     to:option.email,
-//     subject:option.subject,
-//     text:option.message
-// }
-
-// await transporter.sendMail(mailoption)
-// }
-
-// module.exports = mailsender
-
-
 const nodemailer = require("nodemailer");
 const dotenv = require("dotenv");
 dotenv.config();
