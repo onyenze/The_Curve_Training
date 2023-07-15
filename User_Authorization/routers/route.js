@@ -16,7 +16,7 @@ router.route( "/getAll/:id" )
 router.route( "/getAllW/:id" )
     .get(getAll)
 
-router.route("/userverify/:id")
+router.route("/userverify/:id/:token")
 .put(userVerify)
 
 router.route("/forgot-password").get(forgotPassword) 

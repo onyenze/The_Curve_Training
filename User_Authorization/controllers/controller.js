@@ -32,8 +32,8 @@ const signUp =async(req,res)=>{
         user.token = newToken
 
         const subject = "Kindly Verify"
-        const link = `${req.protocol}://${req.get("host")}/api/userverify/${user._id}`
-        const message = `Click on the ${link} to verify`
+        const link = `${req.protocol}://${req.get("host")}/api/userverify/${user._id}/${newToken}`
+        const message = `Click on the link ${link} to verify, kindly note that this link will expire after 5 minutes`
         sendEmail({email:user.email,
             subject,
             message})
@@ -51,6 +51,17 @@ const signUp =async(req,res)=>{
 // user verify
 const userVerify = async(req,res)=>{
     try {
+        const registeredUser = await userModel.findById(req.params.id)
+        const registeredToken = registeredUser.token
+        await jwt.verify(registeredToken,process.env.MY_SECRET,(err,data)=>{
+            if(err){res.json("This link has expired")}
+            else {
+                return data
+            }
+        })
+
+
+
         const verified = await userModel.findByIdAndUpdate(req.params.id,{isVerified:true},)
         if(!verified){
             res.status(400).json({
@@ -67,7 +78,7 @@ const userVerify = async(req,res)=>{
         })
     }
 }
-
+//  to sign in
 const signIn = async (req,res)=>{
     try {
         const {username,email,password} = req.body
@@ -80,6 +91,11 @@ const signIn = async (req,res)=>{
         
         // validate password
         const isPassword = await bcryptjs.compare(password, isEmail.password)
+
+        const checkIfVerify = isPassword.isVerified
+        if(checkIfVerify){
+            
+        }
         if(!isPassword){res.status(400).json({
             message:"Incorrect Password"
         })}     
@@ -101,7 +117,7 @@ const signIn = async (req,res)=>{
     }
 }
 
-
+// forgot password
 const forgotPassword = async (req, res) => {
     try {
       const { email } = req.body;
@@ -134,7 +150,7 @@ const forgotPassword = async (req, res) => {
       });
     }
   };
-  
+// to reset password
 const resetpassword = async (req, res) => {
     try {
       const { id } = req.params;
@@ -185,9 +201,8 @@ const genToken = async ( user ) => {
     const token = await jwt.sign( {
         userId: user._id,
         username: user.username,
-        email: user.email,
-        password: user.password
-    }, process.env.MY_SECRET, {expiresIn: "50m"} )
+        email: user.email
+    }, process.env.MY_SECRET, {expiresIn: 5000} )
     
     return token;
 }
