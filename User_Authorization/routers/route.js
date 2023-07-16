@@ -1,6 +1,6 @@
 const express = require("express")
 const router = express.Router()
-const {signUp, signIn, signOut,userVerify,getAll,resetpassword,forgotPassword} = require("../controllers/controller")
+const {signUp, signIn, signOut,userVerify,getAll,resetpassword,forgotPassword,LoggedinUsers} = require("../controllers/controller")
 
 const {isAdminAuthorized,isSuperAdminAuthorized} = require("../middlewares/middleware")
 
@@ -16,8 +16,11 @@ router.route( "/getAll/:id" )
 router.route( "/getAllW/:id" )
     .get(getAll)
 
+router.route('/loginusers')
+    .get(LoggedinUsers) 
+
 router.route("/userverify/:id/:token")
-.put(userVerify)
+    .put(userVerify)
 
 router.route("/forgot-password").get(forgotPassword) 
 router.route("/reset-password/:id").put(resetpassword);

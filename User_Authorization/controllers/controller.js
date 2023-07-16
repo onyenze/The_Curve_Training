@@ -53,15 +53,14 @@ const userVerify = async(req,res)=>{
     try {
         const registeredUser = await userModel.findById(req.params.id)
         const registeredToken = registeredUser.token
+        // check if the token attached to the user is valid
         await jwt.verify(registeredToken,process.env.MY_SECRET,(err,data)=>{
             if(err){res.json("This link has expired")}
             else {
                 return data
             }
         })
-
-
-
+        // Update if the registered user has been verified 
         const verified = await userModel.findByIdAndUpdate(req.params.id,{isVerified:true},)
         if(!verified){
             res.status(400).json({
@@ -82,30 +81,44 @@ const userVerify = async(req,res)=>{
 const signIn = async (req,res)=>{
     try {
         const {username,email,password} = req.body
-
         // validate username
         const isEmail = await userModel.findOne({email})
         if(!isEmail){res.status(400).json({
             message:"Email is incorrect"
            }) } else {
-        
+        // attach the boolean value of a verified account to a variable
+        const checkIfVerify = isEmail.isVerified
         // validate password
         const isPassword = await bcryptjs.compare(password, isEmail.password)
-
-        const checkIfVerify = isPassword.isVerified
-        if(checkIfVerify){
-            
-        }
         if(!isPassword){res.status(400).json({
             message:"Incorrect Password"
-        })}     
+        })} 
+        //check if the account has been verified previously 
+        else if (checkIfVerify==false){
+        
+        // generate a token for the link
+        const newToken = await genToken( isEmail )
 
+        isEmail.token = newToken
+        // Re send link to re-verify an account that has signed up previously
+        const subject = "Kindly Re-Verify"
+        const link = `${req.protocol}://${req.get("host")}/api/userverify/${isEmail._id}/${newToken}`
+        const message = `Click on the link ${link} to verify, kindly note that this link will expire after 5 minutes`
+        sendEmail({email:isEmail.email,
+            subject,
+            message})
+
+            return res.json("you havent verified your acct,check your email to reverify your account")
+        }
+        // update the user to logged in
+        const userLoggedin = await userModel.findByIdAndUpdate(user._id, {islogin: true});
        // save the generated token to "token" variable
        const token = await genToken( isEmail );
        // return a response
        res.status( 200 ).json( {
            message: "Sign In successful",
-           token: token
+           token: token,
+           data :userLoggedin
        })   }
         
 
@@ -185,10 +198,13 @@ const signOut = async (req, res) => {
         const token = authHeader.split( " " )[ 1 ];
         // remove the token from the authentication head and place it in the blacklist array.
         await blackList.push( token );
+        const userLogout = await userModel.findByIdAndUpdate(id, {islogin: false});
+        
         // return a success response
         res.status(200).json({
         status: "Success",
         message: "User logged out successfully.",
+        data:userLogout
         });
   } catch (error) {
     res.status(500).json({
@@ -218,4 +234,27 @@ const getAll = async(req,res)=>{
         res.status(500).json({message:error.message})
     }
 }
-module.exports = {signUp, signIn, signOut,userVerify,getAll,resetpassword,forgotPassword}
+
+// get ll logged in users
+const LoggedinUsers = async (req, res)=>{
+    try {
+        const loginUsers = await userModel.findAll({islogin: true})
+        if (loginUsers.length == 0) {
+            res.status(404).json({
+                message: 'No Users logged in'
+            })
+        } else {
+            res.status(200).json({
+                message: ' Loggedin Users',
+                data: loginUsers
+            });
+        }
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        })
+    }
+}
+
+
+module.exports = {signUp, signIn, signOut,userVerify,getAll,resetpassword,forgotPassword,LoggedinUsers}
