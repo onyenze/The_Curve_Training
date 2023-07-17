@@ -23,7 +23,7 @@ router.route("/userverify/:id/:token")
     .put(userVerify)
 
 router.route("/forgot-password").get(forgotPassword) 
-router.route("/reset-password/:id").put(resetpassword);
+router.route("/reset-password/:id/:token").put(resetpassword);
 
 router.route( "/sign-out" )
     .post(signOut)
