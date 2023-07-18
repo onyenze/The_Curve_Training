@@ -225,9 +225,9 @@ const genToken = async ( user ) => {
     return token;
 }
 
-const decodedToken = async (user)=>{
-    
-}
+// const decodedToken = async (user)=>{
+//     const token = await jwt.verify
+// }
 
 
 // get all users
@@ -241,7 +241,7 @@ const getAll = async(req,res)=>{
     }
 }
 
-// get ll logged in users
+// get All logged in users
 const LoggedinUsers = async (req, res)=>{
     try {
         const loginUsers = await userModel.findAll({islogin: true})
