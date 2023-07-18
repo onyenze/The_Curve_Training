@@ -27,7 +27,7 @@ const signUp =async(req,res)=>{
 
         const user = new userModel(data)
         // save the generated token to "token" variable
-       const newToken = await genToken( user )
+       const newToken = await genToken( user, {expiresIn: "5m"} )
 
         user.token = newToken
 
@@ -96,8 +96,8 @@ const signIn = async (req,res)=>{
         //check if the account has been verified previously 
         else if (checkIfVerify==false){
         
-        // generate a token for the link
-        const newToken = await genToken( isEmail )
+        // generate a token for the link to expire after 5 minutes
+        const newToken = await genToken( isEmail, {expiresIn: "5m"} )
 
         isEmail.token = newToken
         // Re send link to re-verify an account that has signed up previously
@@ -113,7 +113,7 @@ const signIn = async (req,res)=>{
         // update the user to logged in
         const userLoggedin = await userModel.findByIdAndUpdate(user._id, {islogin: true});
        // save the generated token to "token" variable
-       const token = await genToken( isEmail );
+       const token = await genToken( isEmail, {expiresIn: "1d"} );
        // return a response
        res.status( 200 ).json( {
            message: "Sign In successful",
@@ -140,7 +140,7 @@ const forgotPassword = async (req, res) => {
         const subject = "forgotten password";
         // for better security practice a unique token should be sent to reset password instead of user._id
         // generate a token for the link
-        const newToken = await genToken( user )
+        const newToken = await genToken( user, {expiresIn: "5m"} )
 
         user.token = newToken
         const link = `${req.protocol}://${req.get("host")}/api/reset-password/${user._id}/${newToken}`;
@@ -170,6 +170,15 @@ const resetpassword = async (req, res) => {
     try {
       const { id } = req.params;
       const { newpassword } = req.body;
+      const registeredUser = await userModel.findById(id)
+      const registeredToken = registeredUser.token
+      // check if the token attached to the user is valid
+      await jwt.verify(registeredToken,process.env.MY_SECRET,(err,data)=>{
+        if(err){res.json("This link has expired")}
+        else {
+            return data
+        }
+    })
       const salt = bcryptjs.genSaltSync(10);
       const hashedPassword = bcryptjs.hashSync(newpassword, salt);
       const user = await User.findByIdAndUpdate(id, { password: hashedPassword },{new:true});
@@ -215,12 +224,12 @@ const signOut = async (req, res) => {
   }
 };
 
-const genToken = async ( user ) => {
+const genToken = async ( user, time ) => {
     const token = await jwt.sign( {
         userId: user._id,
         username: user.username,
         email: user.email
-    }, process.env.MY_SECRET, {expiresIn: 5000} )
+    }, process.env.MY_SECRET, time )
     
     return token;
 }
