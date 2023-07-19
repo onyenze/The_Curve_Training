@@ -1,6 +1,6 @@
 const mongoose = require("mongoose")
 
-const userSchema = new mongoose.Schema({
+const adminSchema = new mongoose.Schema({
     username:{
         type:String,
         required:true["Username is required"]
@@ -15,7 +15,7 @@ const userSchema = new mongoose.Schema({
     },
     isAdmin:{
         type:Boolean,
-        default:false
+        default:true
     },
     isSuperAdmin:{
         type:Boolean,
@@ -37,6 +37,6 @@ const userSchema = new mongoose.Schema({
     }
 },{timestamps:true})
 
-const userModel= mongoose.model("Users", userSchema)
+const adminModel= mongoose.model("admin", adminSchema)
 
-module.exports = userModel
+module.exports = adminModel

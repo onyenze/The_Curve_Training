@@ -1,6 +1,10 @@
 const mongoose = require("mongoose")
 
 const recordSchema = new mongoose.Schema({
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Users"
+    },
     math:{
         type:String,
         required:true["score is required"]

@@ -8,12 +8,12 @@ const {sendEmail} = require("./email")
 const signUp =async(req,res)=>{
     try {
         const {username,email,password} = req.body
-        const isEmail = await userModel.findOne({email})
-        if(isEmail){
-            res.status(400).json({
-                message:"Email already Exist"
-            })
-        } else {
+        // const isEmail = await userModel.findOne({email})
+        // if(isEmail){
+        //     res.status(400).json({
+        //         message:"Email already Exist"
+        //     })
+        // } else {
             const saltedRound = 10
             const hashedPassword = await bcryptjs.hash(password, saltedRound)
 
@@ -27,25 +27,32 @@ const signUp =async(req,res)=>{
 
         const user = new userModel(data)
         // save the generated token to "token" variable
-       const newToken = await genToken( user, {expiresIn: "5m"} )
+       const newToken = await genToken( user, {expiresIn: "1d"} )
 
         user.token = newToken
 
-        const subject = "Kindly Verify"
-        const link = `${req.protocol}://${req.get("host")}/api/userverify/${user._id}/${newToken}`
-        const message = `Click on the link ${link} to verify, kindly note that this link will expire after 5 minutes`
-        sendEmail({email:user.email,
-            subject,
-            message})
+      //   const subject = "Kindly Verify"
+      //   const link = `${req.protocol}://${req.get("host")}/api/userverify/${user._id}/${newToken}`
+      //   const message = `Click on the link ${link} to verify, kindly note that this link will expire after 5 minutes`
+      //   sendEmail({email:user.email,
+      //       subject,
+      //       message})
         await user.save()
         res.status(201).json({
             data:user
         })
-        }
+        // }
         
     } catch (error) {
         res.status(500).json({message:error.message})
     }
+}
+
+
+// create an admin
+const createAdmin = async(req,res)=>{
+  const {username,email,password} = req.body
+
 }
 
 // user verify
