@@ -22,7 +22,7 @@ router.route('/loginusers')
 router.route("/userverify/:id/:token")
     .put(userVerify)
 
-router.route("/forgot-password").get(forgotPassword) 
+router.route("/forgot-password").post(forgotPassword) 
 router.route("/reset-password/:id/:token").put(resetpassword);
 
 router.route( "/sign-out" )

@@ -111,7 +111,7 @@ const signIn = async (req,res)=>{
             return res.json("you havent verified your acct,check your email to reverify your account")
         }
         // update the user to logged in
-        const userLoggedin = await userModel.findByIdAndUpdate(user._id, {islogin: true});
+        const userLoggedin = await userModel.findByIdAndUpdate(isEmail._id, {islogin: true});
        // save the generated token to "token" variable
        const token = await genToken( isEmail, {expiresIn: "1d"} );
        // return a response
@@ -134,9 +134,16 @@ const signIn = async (req,res)=>{
 const forgotPassword = async (req, res) => {
     try {
       const { email } = req.body;
+      console.log(email);
       //create a link with the reset password link and send it to email
-      const user = await User.findOne({ email });
-      if (user) {
+      const user = await userModel.findOne({email:email});
+      console.log(user);
+
+      if (!user) {
+        res.status(404).json({
+          message: "user not found",
+        });
+      } else {
         const subject = "forgotten password";
         // for better security practice a unique token should be sent to reset password instead of user._id
         // generate a token for the link
@@ -153,12 +160,9 @@ const forgotPassword = async (req, res) => {
         sendEmail(data);
         res.status(200).json({
           message: "Check your registered email for your password reset link",
+          data:user
         });
-      } else {
-        res.status(404).json({
-          message: "user not found",
-        });
-      }
+      }  
     } catch (error) {
       res.status(500).json({
         message: error.message,
