@@ -8,8 +8,8 @@ const jwt = require("jsonwebtoken")
 // createAdmin
 const createAdmin =async(req,res)=>{
     try {
-        req.params.id
-        const {username,email} = req.body
+        req.params.adminid
+        const {username,email,password} = req.body
         // const isEmail = await userModel.findOne({email})
         // if(isEmail){
         //     res.status(400).json({
@@ -39,9 +39,10 @@ const createAdmin =async(req,res)=>{
     //     sendEmail({email:user.email,
     //         subject,
     //         message})
+    console.log(admin)
         await admin.save()
         res.status(201).json({
-            data:user
+            data:admin
         })
         // }
         

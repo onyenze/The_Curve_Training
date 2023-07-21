@@ -34,9 +34,9 @@ router.route( "/sign-out" )
 router.route("/updateAdmin/:id")
     .put(isAdminAuthorized,updateAdmin)
 
-router.route( "/create/:id" )
+router.route( "/create/:adminId" )
     .post(isAdminAuthorized, createAdmin)
-
+// Route to upgrade a user to admin
 router.route( "/createAdmin/:userId" )
     .put(userAuth,isAdminAuthorized, upgradeUserToAdmin)
 // super admin

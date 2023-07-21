@@ -65,6 +65,7 @@
 
 const jwt = require("jsonwebtoken");
 const User = require("../models/userModel");
+const adminModel = require("../models/adminModel")
 
 const dotenv = require("dotenv");
 dotenv.config();
@@ -94,7 +95,10 @@ const userAuth = async (req, res, next) => {
 
 const isAdminAuthorized = async (req, res, next) => {
   try {
-    const user = await User.findById(req.userId);
+    
+    
+    const user = await User.findById(req.adminId)
+    console.log(user);
     if (user.isAdmin) {
       next();
     } else {
