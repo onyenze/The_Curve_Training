@@ -97,7 +97,7 @@ const isAdminAuthorized = async (req, res, next) => {
   try {
     
     
-    const user = await User.findById(req.adminId)
+    const user = await User.findById(req.params.adminId)
     console.log(user);
     if (user.isAdmin) {
       next();

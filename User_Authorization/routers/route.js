@@ -15,8 +15,8 @@ router.route( "/getAll/:id" )
 
 
 
-router.route('/loginusers')
-    .get(LoggedinUsers) 
+router.route('/loginusers/adminId')
+    .get(isAdminAuthorized,LoggedinUsers) 
     
 
 router.route('/signIn')
