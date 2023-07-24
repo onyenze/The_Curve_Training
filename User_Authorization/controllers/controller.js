@@ -283,4 +283,7 @@ const LoggedinUsers = async (req, res)=>{
 }
 
 
+
+
+
 module.exports = {signUp, signIn, signOut,userVerify,getAll,resetpassword,forgotPassword,LoggedinUsers}
