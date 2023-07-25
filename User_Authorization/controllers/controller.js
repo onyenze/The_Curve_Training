@@ -49,11 +49,6 @@ const signUp =async(req,res)=>{
 }
 
 
-// create an admin
-const createAdmin = async(req,res)=>{
-  const {username,email,password} = req.body
-
-}
 
 // user verify
 const userVerify = async(req,res)=>{
