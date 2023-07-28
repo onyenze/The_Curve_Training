@@ -131,7 +131,9 @@ const upgradeUserToAdmin = async (req, res) => {
     }
   };
 
-// get all users
+
+
+  // get all users
 const getAll = async(req,res)=>{
     try {
        const autheticatedUser = await adminModel.findById(req.params.id) 
