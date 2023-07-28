@@ -122,4 +122,7 @@ const isSuperAdminAuthorized = async (req, res, next) => {
   }
 };
 
+
+
+
 module.exports = { userAuth, isAdminAuthorized, isSuperAdminAuthorized };
