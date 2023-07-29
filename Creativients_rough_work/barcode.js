@@ -85,3 +85,10 @@ mongoose.connect(MONGODB_URI, {
 });
 
 app.use('/api', ticketRoutes);
+
+
+// With the above code, when you send a GET request to /api/ticket/:ticketId/qrcode, it will fetch the ticket details from the MongoDB database using the ticketModel, generate a QR code based on the ticket data using bwip-js, and send the QR code image as the response. The QR code data contains the ticket ID, event details, and purchaser information.
+
+// On the frontend (React), you can create a ticket details page and make an API request to the server to get the QR code image for a specific ticket ID. Then, you can display the QR code image using an image tag or a library like react-qr-code or qrcode.react.
+
+// Please make sure to handle authentication and authorization for the ticket details route appropriately, as QR codes may contain sensitive data, and you want to ensure that only authorized users can access them.
