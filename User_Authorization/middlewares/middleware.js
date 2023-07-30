@@ -52,6 +52,7 @@
 // } 
 
 
+
 // const isSuperAdminAuthorized = (req,res,next)=>{
 //     authenticator(req,res,(async()=>{
 //         const existingUser = await user.findById(req.params.id)
