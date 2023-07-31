@@ -10,6 +10,8 @@ const ticketSchema = new mongoose.Schema({
   price: { type: Number, required: true },
 });
 
+
+
 const Ticket = mongoose.model('Ticket', ticketSchema);
 
 // my ticket route and controller
